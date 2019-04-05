@@ -40,24 +40,60 @@ func checkNotNil(t *testing.T, result ICat, currentTest string) {
 	}
 }
 
-func TestCatFactory(t *testing.T) {
-	c := CreateAnimal("cat", 10, 10)
+func TestCatFactoryDefault(t *testing.T) {
+	c := createAnimalFactoryDefault("cat", 10, 10)
 	checkNotNil(t, c, "Factory")
 }
 
-func TestCatFactoryError1(t *testing.T) {
-	c := CreateAnimal("cat", -10, 10)
+func TestCatFactoryDefaultError1(t *testing.T) {
+	c := createAnimalFactoryDefault("cat", -10, 10)
 	checkNil(t, c, "Factory error")
 }
 
-func TestCatFactoryError2(t *testing.T) {
-	c := CreateAnimal("cat", 10, -10)
+func TestCatFactoryDefaultError2(t *testing.T) {
+	c := createAnimalFactoryDefault("cat", 10, -10)
 	checkNil(t, c, "Factory error")
 }
 
-func TestCatFactoryError3(t *testing.T) {
-	c := CreateAnimal("dog", 10, 10)
+func TestCatFactoryDefaultError3(t *testing.T) {
+	c := createAnimalFactoryDefault("dog", 10, 10)
 	checkNil(t, c, "Factory error")
+}
+
+func TestCatFactoryFull(t *testing.T) {
+	factory := GetAnimalFactory()
+	c := factory.CreateAnimal("cat", 10, 10)
+	checkNotNil(t, c, "Factory error")
+}
+
+func TestSetFactory(t *testing.T) {
+	factory := GetAnimalFactory()
+	factory.SetFactory(func(string, int, float32) ICat {
+		return nil
+	})
+	c := factory.CreateAnimal("cat", 10, 10)
+	checkNil(t, c, "Set factory error")
+}
+
+func TestUnsetFactory(t *testing.T) {
+	factory := GetAnimalFactory()
+	factory.SetFactory(func(string, int, float32) ICat {
+		return nil
+	})
+	factory.UnsetFactory()
+	c := factory.CreateAnimal("cat", 10, 10)
+	checkNotNil(t, c, "Unset factory error")
+}
+
+func TestSingleton(t *testing.T) {
+	factory := GetAnimalFactory()
+	factory.SetFactory(func(string, int, float32) ICat {
+		return nil
+	})
+	factory2 := GetAnimalFactory()
+	factory2.UnsetFactory()
+	c := factory.CreateAnimal("cat", 10, 10)
+	checkNotNil(t, c, "Singleton error")
 }
 
 func TestGetAge(t *testing.T) {
