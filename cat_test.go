@@ -68,7 +68,7 @@ func TestGetAge(t *testing.T) {
 func TestSetAge(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	c.SetAge(20)
-	checkInt(t, c.age, 10, "SetAge")
+	checkInt(t, c.age, 20, "SetAge")
 }
 
 func TestGetSize(t *testing.T) {
@@ -79,7 +79,7 @@ func TestGetSize(t *testing.T) {
 func TestSetSize(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	c.SetSize(20)
-	checkFloat(t, c.size, 10, "SetSize")
+	checkFloat(t, c.size, 20, "SetSize")
 }
 
 func TestEat(t *testing.T) {
