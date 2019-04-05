@@ -89,12 +89,52 @@ func TestSleep(t *testing.T) {
 
 var isOk bool
 
-func TestListener(t *testing.T) {
-	c := cat{age: 10, size: 10, listeners: make(map[string][]func())}
+func TestAddListener(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
 	isOk = false
-	c.AddListener("eat", func() {
+	f := func() {
 		isOk = true
-	})
+	}
+	c.AddListener("eat", &f)
 	c.Eat()
-	checkBool(t, isOk, true, "Listener")
+	checkBool(t, isOk, true, "Listener add")
+}
+
+func TestRemoveListener(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
+	isOk = false
+	f := func() {
+		isOk = true
+	}
+	c.AddListener("eat", &f)
+	c.RemoveListener("eat", &f)
+	c.Eat()
+	checkBool(t, isOk, false, "Listener remove")
+}
+
+var result int
+
+func TestAddRemoveListeners(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
+	result = 0
+	f1 := func() {
+		result++
+	}
+	f2 := func() {
+		result++
+	}
+	f3 := func() {
+		result++
+	}
+	f4 := func() {
+		result++
+	}
+	c.AddListener("eat", &f1)
+	c.AddListener("eat", &f2)
+	c.AddListener("eat", &f3)
+	c.RemoveListener("eat", &f2)
+	c.AddListener("eat", &f4)
+	c.RemoveListener("eat", &f1)
+	c.Eat()
+	checkInt(t, result, 2, "Listener add/remove")
 }

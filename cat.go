@@ -8,7 +8,8 @@ type ICat interface {
 	SetSize(float32)
 	Eat() string
 	Sleep() string
-	AddListener(string, func())
+	AddListener(string, *func())
+	RemoveListener(string, *func())
 	callListeners(string)
 }
 
@@ -16,5 +17,5 @@ type ICat interface {
 type cat struct {
 	age       int
 	size      float32
-	listeners map[string][]func()
+	listeners map[string][]*func()
 }
