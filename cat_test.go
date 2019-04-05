@@ -55,6 +55,11 @@ func TestCatFactoryError2(t *testing.T) {
 	checkNil(t, c, "Factory error")
 }
 
+func TestCatFactoryError3(t *testing.T) {
+	c := CreateAnimal("dog", 10, 10)
+	checkNil(t, c, "Factory error")
+}
+
 func TestGetAge(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	checkInt(t, c.GetAge(), 10, "GetAge")
