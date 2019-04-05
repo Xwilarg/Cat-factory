@@ -22,6 +22,12 @@ func checkString(t *testing.T, result, expectation, currentTest string) {
 	}
 }
 
+func checkBool(t *testing.T, result, expectation bool, currentTest string) {
+	if result != expectation {
+		t.Errorf("Incorrect %s, got: %t, expected: %t", currentTest, result, expectation)
+	}
+}
+
 func checkNil(t *testing.T, result ICat, currentTest string) {
 	if result != nil {
 		t.Errorf("Incorrect %s, expected (nil)", currentTest)
@@ -79,4 +85,16 @@ func TestEat(t *testing.T) {
 func TestSleep(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	checkString(t, c.Sleep(), "Cat is sleeping...", "Sleep")
+}
+
+var isOk bool
+
+func TestListener(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]func())}
+	isOk = false
+	c.AddListener("eat", func() {
+		isOk = true
+	})
+	c.Eat()
+	checkBool(t, isOk, true, "Listener")
 }
