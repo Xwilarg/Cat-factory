@@ -35,16 +35,16 @@ func (c *cat) Sleep() string {
 }
 
 // AddListener add a listener on a function
-func (c *cat) AddListener(name string, callback *func()) {
+func (c *cat) AddListener(name string, callback chan ICat) {
 	if _, ok := c.listeners[name]; ok {
 		c.listeners[name] = append(c.listeners[name], callback)
 	} else {
-		c.listeners[name] = []*func(){callback}
+		c.listeners[name] = []chan ICat{callback}
 	}
 }
 
 // RemoveListener remove a listener on a function
-func (c *cat) RemoveListener(name string, callback *func()) {
+func (c *cat) RemoveListener(name string, callback chan ICat) {
 	if elems, ok := c.listeners[name]; ok {
 		for i, e := range elems {
 			if e == callback {
@@ -57,7 +57,7 @@ func (c *cat) RemoveListener(name string, callback *func()) {
 func (c *cat) callListeners(name string) {
 	if elems, ok := c.listeners[name]; ok {
 		for _, e := range elems {
-			(*e)()
+			e <- c
 		}
 	}
 }

@@ -92,54 +92,52 @@ func TestSleep(t *testing.T) {
 	checkString(t, c.Sleep(), "Cat is sleeping...", "Sleep")
 }
 
-var isOk bool
-
 func TestAddListener(t *testing.T) {
-	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
-	isOk = false
-	f := func() {
-		isOk = true
-	}
-	c.AddListener("eat", &f)
+	c := cat{age: 10, size: 10, listeners: make(map[string][]chan ICat)}
+	f := make(chan ICat, 1)
+	c.AddListener("eat", f)
 	c.Eat()
-	checkBool(t, isOk, true, "Listener add")
+	checkNotNil(t, <-f, "Listener add")
+}
+
+func errorOnReceive(t *testing.T, c chan ICat) {
+	<-c
+	checkBool(t, true, false, "Listener remove")
 }
 
 func TestRemoveListener(t *testing.T) {
-	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
-	isOk = false
-	f := func() {
-		isOk = true
-	}
-	c.AddListener("eat", &f)
-	c.RemoveListener("eat", &f)
+	c := cat{age: 10, size: 10, listeners: make(map[string][]chan ICat)}
+	f := make(chan ICat, 1)
+	go errorOnReceive(t, f)
+	c.AddListener("eat", f)
+	c.RemoveListener("eat", f)
 	c.Eat()
-	checkBool(t, isOk, false, "Listener remove")
 }
 
-var result int
-
-func TestAddRemoveListeners(t *testing.T) {
-	c := cat{age: 10, size: 10, listeners: make(map[string][]*func())}
-	result = 0
-	f1 := func() {
-		result++
-	}
-	f2 := func() {
-		result++
-	}
-	f3 := func() {
-		result++
-	}
-	f4 := func() {
-		result++
-	}
-	c.AddListener("eat", &f1)
-	c.AddListener("eat", &f2)
-	c.AddListener("eat", &f3)
-	c.RemoveListener("eat", &f2)
-	c.AddListener("eat", &f4)
-	c.RemoveListener("eat", &f1)
+func TestAddRemoveListener(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]chan ICat)}
+	f1 := make(chan ICat, 1)
+	f2 := make(chan ICat, 1)
+	f3 := make(chan ICat, 1)
+	f4 := make(chan ICat, 1)
+	go errorOnReceive(t, f1)
+	go errorOnReceive(t, f2)
+	c.AddListener("eat", f1)
+	c.AddListener("eat", f2)
+	c.AddListener("eat", f3)
+	c.RemoveListener("eat", f2)
+	c.AddListener("eat", f4)
+	c.RemoveListener("eat", f1)
 	c.Eat()
-	checkInt(t, result, 2, "Listener add/remove")
+	checkNotNil(t, <-f3, "Listener add/remove")
+	checkNotNil(t, <-f4, "Listener add/remove")
+}
+
+func TestGetAgeListener(t *testing.T) {
+	c := cat{age: 10, size: 10, listeners: make(map[string][]chan ICat)}
+	f := make(chan ICat, 1)
+	c.AddListener("eat", f)
+	c.Eat()
+	(<-f).SetAge(20)
+	checkInt(t, c.age, 20, "SetAge")
 }

@@ -7,7 +7,7 @@ func CreateAnimal(animal string, age int, size float32) ICat {
 		if age <= 0 || size <= 0 {
 			return nil
 		}
-		return &cat{age: age, size: size, listeners: make(map[string][]*func())}
+		return &cat{age: age, size: size, listeners: make(map[string][]chan ICat)}
 	default:
 		return nil
 	}
