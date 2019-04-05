@@ -1,7 +1,6 @@
-all: test build
+all: test
 
 test:
 	go test
 
-build:
-	go tool pack r cat.a cat_impl.go cat.go factory.go
+.PHONY: all test
