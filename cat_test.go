@@ -22,6 +22,33 @@ func checkString(t *testing.T, result, expectation, currentTest string) {
 	}
 }
 
+func checkNil(t *testing.T, result ICat, currentTest string) {
+	if result != nil {
+		t.Errorf("Incorrect %s, expected (nil)", currentTest)
+	}
+}
+
+func checkNotNil(t *testing.T, result ICat, currentTest string) {
+	if result == nil {
+		t.Errorf("Incorrect %s, expected not (nil)", currentTest)
+	}
+}
+
+func TestCatFactory(t *testing.T) {
+	c := CreateAnimal("cat", 10, 10)
+	checkNotNil(t, c, "Factory")
+}
+
+func TestCatFactoryError1(t *testing.T) {
+	c := CreateAnimal("cat", -10, 10)
+	checkNil(t, c, "Factory error")
+}
+
+func TestCatFactoryError2(t *testing.T) {
+	c := CreateAnimal("cat", 10, -10)
+	checkNil(t, c, "Factory error")
+}
+
 func TestGetAge(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	checkInt(t, c.GetAge(), 10, "GetAge")

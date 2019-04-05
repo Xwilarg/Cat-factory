@@ -4,6 +4,9 @@ package cat
 func CreateAnimal(animal string, age int, size float32) ICat {
 	switch animal {
 	case "cat":
+		if age <= 0 || size <= 0 {
+			return nil
+		}
 		return &cat{age: age, size: size}
 	default:
 		return nil
