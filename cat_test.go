@@ -16,6 +16,12 @@ func checkInt(t *testing.T, result, expectation int, currentTest string) {
 	}
 }
 
+func checkString(t *testing.T, result, expectation, currentTest string) {
+	if result != expectation {
+		t.Errorf("Incorrect %s, got: %s, expected: %s", currentTest, result, expectation)
+	}
+}
+
 func TestGetAge(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	checkInt(t, c.GetAge(), 10, "GetAge")
@@ -36,4 +42,14 @@ func TestSetSize(t *testing.T) {
 	c := cat{age: 10, size: 10}
 	c.SetSize(20)
 	checkFloat(t, c.size, 10, "SetSize")
+}
+
+func TestEat(t *testing.T) {
+	c := cat{age: 10, size: 10}
+	checkString(t, c.Eat(), "Cat is eating...", "Eat")
+}
+
+func TestSleep(t *testing.T) {
+	c := cat{age: 10, size: 10}
+	checkString(t, c.Sleep(), "Cat is sleeping...", "Sleep")
 }

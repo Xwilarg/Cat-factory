@@ -6,8 +6,8 @@ type ICat interface {
 	SetAge(int)
 	GetSize() float32
 	SetSize(float32)
-	Eat()
-	Sleep()
+	Eat() string
+	Sleep() string
 }
 
 // cat is an implementation of ICat

@@ -1,7 +1,5 @@
 package cat
 
-import "fmt"
-
 // GetAge return the cat age
 func (c cat) GetAge() int {
 	return c.age
@@ -23,11 +21,11 @@ func (c cat) SetSize(size float32) {
 }
 
 // Eat allow the cat to eat
-func (c cat) Eat() {
-	fmt.Printf("Cat is eating...")
+func (c cat) Eat() string {
+	return "Cat is eating..."
 }
 
 // Sleep allow the cat to sleep
-func (c cat) Sleep() {
-	fmt.Printf("Cat is sleeping...")
+func (c cat) Sleep() string {
+	return "Cat is sleeping..."
 }
