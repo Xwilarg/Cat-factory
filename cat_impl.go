@@ -16,7 +16,7 @@ func (c *cat) GetSize() float32 {
 	return c.size
 }
 
-// SetSize return the cat size
+// SetSize set cat size
 func (c *cat) SetSize(size float32) {
 	c.size = size
 	c.callListeners("size")
