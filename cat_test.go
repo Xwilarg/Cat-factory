@@ -133,11 +133,11 @@ func TestAddRemoveListener(t *testing.T) {
 	checkNotNil(t, <-f4, "Listener add/remove")
 }
 
-func TestGetAgeListener(t *testing.T) {
+func TestSetAgeListener(t *testing.T) {
 	c := cat{age: 10, size: 10, listeners: make(map[string][]chan ICat)}
 	f := make(chan ICat, 1)
 	c.AddListener("eat", f)
 	c.Eat()
 	(<-f).SetAge(20)
-	checkInt(t, c.age, 20, "SetAge")
+	checkInt(t, c.age, 20, "SetAge listener")
 }
