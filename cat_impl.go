@@ -1,7 +1,5 @@
 package cat
 
-import "fmt"
-
 // GetAge return the cat age
 func (c cat) GetAge() int {
 	return c.age
@@ -49,7 +47,6 @@ func (c cat) AddListener(name string, callback *func()) {
 func (c cat) RemoveListener(name string, callback *func()) {
 	if elems, ok := c.listeners[name]; ok {
 		for i, e := range elems {
-			fmt.Printf("%p == %p\n", e, callback)
 			if e == callback {
 				c.listeners[name] = append(c.listeners[name][:i], c.listeners[name][i+1:]...)
 			}
